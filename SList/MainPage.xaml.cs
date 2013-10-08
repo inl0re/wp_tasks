@@ -43,7 +43,7 @@ namespace SList
                 if (ItemAddBox.Text != null)
                 {
                     // Добавить элемент в начало коллекции
-                    App.ViewModel.Items.Insert(0, (new ItemViewModel() { Name = ItemAddBox.Text, ToDelete = "Collapsed" }));                 
+                    App.ViewModel.Items.Insert(0, (new ItemViewModel() { Name = ItemAddBox.Text, ToDelete = "Collapsed" }));
                 }
                 // Очистить текстбокс
                 ItemAddBox.Text = "";
@@ -58,13 +58,11 @@ namespace SList
             // Зачёркиваем элемент
             if (itemViewModel.ToDelete == "Collapsed")
             {
-                txtBlk.Opacity = 0.7;
                 itemViewModel.ToDelete = "Visible";
             }
             // Убираем зачёркивание
             else if (itemViewModel.ToDelete == "Visible")
             {
-                txtBlk.Opacity = 1;
                 itemViewModel.ToDelete = "Collapsed";
             }
         }     

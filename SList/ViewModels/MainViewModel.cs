@@ -69,7 +69,6 @@ namespace SList
             string[] lines = list.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
-                // for (int i = lines.Length-1; i >= 0; i--)
                 for (int i = 0; i < lines.Length; i++)
                 {
                     this.Items.Add(new ItemViewModel() { Name = lines[i], ToDelete = "Collapsed" });
