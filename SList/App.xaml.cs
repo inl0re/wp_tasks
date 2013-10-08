@@ -99,14 +99,7 @@ namespace SList
         // Этот код не будет выполняться при закрытии приложения
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-            var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Truncate, fileStorage));
-            foreach (var item in App.ViewModel.Items.ToList())
-            {
-                if (item.ToDelete == "Collapsed")
-                    fileWrite.WriteLine(item.Name);
-            }
-            fileWrite.Close();
+            DeleteItemsFromFile();
         }
 
         // Код для выполнения при закрытии приложения (например, при нажатии пользователем кнопки "Назад")
@@ -114,6 +107,12 @@ namespace SList
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
             // Убедитесь, что здесь сохраняется необходимое состояние приложения.
+            DeleteItemsFromFile();
+        }
+
+        // Метод удаления зачёркнутых элементов списка из файла
+        protected void DeleteItemsFromFile()
+        {
             var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
             var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Truncate, fileStorage));
             foreach (var item in App.ViewModel.Items.ToList())

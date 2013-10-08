@@ -37,6 +37,7 @@ namespace SList
         // Добавление в список по нажатию клавиши Enter
         private void ItemAddBox_KeyDown(object sender, KeyEventArgs e)
         {
+            // Если нажат Enter
             if (e.Key.Equals(Key.Enter))
             {
                 if (ItemAddBox.Text != null)
@@ -45,55 +46,28 @@ namespace SList
                     var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Append, fileStorage));
                     fileWrite.WriteLine(ItemAddBox.Text);
                     fileWrite.Close();
-
-                    App.ViewModel.Items.Insert(0, (new ItemViewModel() { Name = ItemAddBox.Text, ToDelete = "Collapsed" }));
-                    
+                    // Добавить элемент в начало коллекции
+                    App.ViewModel.Items.Insert(0, (new ItemViewModel() { Name = ItemAddBox.Text, ToDelete = "Collapsed" }));                 
                 }
+                // Очистить текстбокс
                 ItemAddBox.Text = "";
-                // this.Focus();
             }
         }
 
+        // Нажатие на элемент списка
         private void ItemsTextBlock_Tap(object sender, GestureEventArgs e)
         {
             var txtBlk = (TextBlock)sender;
             var itemViewModel = (ItemViewModel)txtBlk.DataContext;
+            // Зачёркиваем элемент
             if (itemViewModel.ToDelete == "Collapsed")
             {
                 txtBlk.Opacity = 0.7;
                 itemViewModel.ToDelete = "Visible";
-
-
-
-                /*
-                string line = null;
-                var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                var fileRead = new StreamReader(new IsolatedStorageFileStream("List.txt", FileMode.OpenOrCreate, fileStorage));
-                // Открываем на запись временный файл
-                var fileWrite = new StreamWriter(new IsolatedStorageFileStream("Temp.txt", FileMode.OpenOrCreate, fileStorage));
-                // Перебираем в цикле строки и пишем в файл, выкинув удалённую
-                while ((line = fileRead.ReadLine()) != null)
-                {
-                    if (String.Compare(line, itemViewModel.Name) == 0)
-                        continue;
-                    fileWrite.WriteLine(line);
-                }
-                fileWrite.Close();
-                fileRead.Close();
-                // Удаляем основной файл, затем временный копируем на его место
-                fileStorage.DeleteFile("List.txt");
-                fileStorage.MoveFile("Temp.txt", "List.txt");     
-                */
             }
-
+            // Убираем зачёркивание
             else if (itemViewModel.ToDelete == "Visible")
             {
-                /*
-                var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Append, fileStorage));
-                fileWrite.WriteLine(txtBlk.Text);
-                fileWrite.Close();
-                */
                 txtBlk.Opacity = 1;
                 itemViewModel.ToDelete = "Collapsed";
             }
@@ -107,11 +81,13 @@ namespace SList
                     break;
                 }
                 else
+                {
                     ApplicationBar.IsVisible = false;
+                }
             }
         }
 
-        // Удалить вычеркнутые
+        // Удалить вычеркнутые из коллекции
         private void RefreshIconButton_Click(object sender, EventArgs e)
         {
             foreach (var item in App.ViewModel.Items.ToList())
@@ -119,33 +95,12 @@ namespace SList
                 if (item.ToDelete == "Visible")
                     App.ViewModel.Items.Remove(item);
             }
-            /*
-            App.ViewModel.Items.Clear();
-            App.ViewModel.LoadData();
-             */
             ApplicationBar.IsVisible = false;
         }
 
         // Тестовая кнопка
         private void DebugIconButton_Click(object sender, EventArgs e)
         {
-            /* for (int i = 0; i < App.ViewModel.Items.Count(); i++)
-            {
-                if (App.ViewModel.Items[i].ToDelete == "Visible")
-                {
-                    ApplicationBar.ToDelete = true;
-                    break;
-                }
-            }
-             */
-            foreach (var item in App.ViewModel.Items)
-            {
-                if (item.ToDelete == "Visible")
-                {
-                    ApplicationBar.IsVisible = true;
-                    break;
-                }
-            }
         }
         
     }
