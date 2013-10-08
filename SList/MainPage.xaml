@@ -25,14 +25,10 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
                     <!-- Row 0 -->
-                    <TextBox x:Name="ItemAddBox" InputScope="Text" Grid.ColumnSpan="2" KeyDown="ItemAddBox_KeyDown"/>
+                    <TextBox x:Name="ItemAddBox" InputScope="Text" KeyDown="ItemAddBox_KeyDown"/>
                     <!-- Row 1 -->
-                    <ScrollViewer Grid.Row="1">
+                    <ScrollViewer Grid.Row="1" Height="Auto" AllowDrop="False" ManipulationMode="Control">
                         <ListBox x:Name="FirstListBox" ItemsSource="{Binding Items}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -46,7 +42,6 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </ScrollViewer>
-                    <TextBlock Name="DebugBlock" Grid.Row="1" Grid.Column="1" />
                 </Grid>
             </controls:PivotItem>
                  
