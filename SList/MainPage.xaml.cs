@@ -42,10 +42,6 @@ namespace SList
             {
                 if (ItemAddBox.Text != null)
                 {
-                    var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                    var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Append, fileStorage));
-                    fileWrite.WriteLine(ItemAddBox.Text);
-                    fileWrite.Close();
                     // Добавить элемент в начало коллекции
                     App.ViewModel.Items.Insert(0, (new ItemViewModel() { Name = ItemAddBox.Text, ToDelete = "Collapsed" }));                 
                 }
