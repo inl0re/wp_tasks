@@ -71,37 +71,6 @@ namespace SList
                 txtBlk.Opacity = 1;
                 itemViewModel.ToDelete = "Collapsed";
             }
-
-            // Проверяем, есть ли зачёркнутые пункты, для появления ApplicationBar
-            foreach (var item in App.ViewModel.Items)
-            {
-                if (item.ToDelete == "Visible")
-                {
-                    ApplicationBar.IsVisible = true;
-                    break;
-                }
-                else
-                {
-                    ApplicationBar.IsVisible = false;
-                }
-            }
-        }
-
-        // Удалить вычеркнутые из коллекции
-        private void RefreshIconButton_Click(object sender, EventArgs e)
-        {
-            foreach (var item in App.ViewModel.Items.ToList())
-            {
-                if (item.ToDelete == "Visible")
-                    App.ViewModel.Items.Remove(item);
-            }
-            ApplicationBar.IsVisible = false;
-        }
-
-        // Тестовая кнопка
-        private void DebugIconButton_Click(object sender, EventArgs e)
-        {
-        }
-        
+        }     
     }
 }

@@ -49,12 +49,5 @@
                  
         </controls:Pivot>
     </Grid>
-
-   <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="False" IsMenuEnabled="False">
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить" Click="RefreshIconButton_Click"/>
-            <!-- <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.basecircle.rest.png" Text="debug" Click="DebugIconButton_Click"/> -->
-        </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>
-
+    
 </phone:PhoneApplicationPage>
