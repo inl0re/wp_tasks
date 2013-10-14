@@ -3,15 +3,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:SList" 
     SampleProperty="Sample Text Property Value">
-    
-    <local:MainViewModel.Items>
-        <local:ItemViewModel Name="огурцы" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="помидоры" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="колбаса" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="сыр" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="молоко" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="хлеб" ToDelete="Collapsed"/>
-        <local:ItemViewModel Name="яйца" ToDelete="Collapsed"/>
-    </local:MainViewModel.Items>
-    
+
+    <local:MainViewModel.PivotsList>
+        <local:Pivots Title="овощи">
+            <local:Pivots.Items>
+                <local:ItemViewModel Name="помидоры" ToDelete="Collapsed"/>
+                <local:ItemViewModel Name="огурцы" ToDelete="Collapsed"/>
+            </local:Pivots.Items>
+        </local:Pivots>
+        <local:Pivots Title="фрукты">
+            <local:Pivots.Items>
+                <local:ItemViewModel Name="яблоки" ToDelete="Collapsed"/>
+                <local:ItemViewModel Name="груши" ToDelete="Collapsed"/>
+            </local:Pivots.Items>
+        </local:Pivots>
+    </local:MainViewModel.PivotsList>
 </local:MainViewModel>

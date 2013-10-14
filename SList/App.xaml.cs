@@ -107,20 +107,27 @@ namespace SList
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
             // Убедитесь, что здесь сохраняется необходимое состояние приложения.
-            DeleteItemsFromFile();
+           DeleteItemsFromFile();
         }
 
         // Метод удаления зачёркнутых элементов списка из файла
         protected void DeleteItemsFromFile()
         {
-            var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-            var fileWrite = new StreamWriter(new IsolatedStorageFileStream("List.txt", FileMode.Truncate, fileStorage));
-            foreach (var item in App.ViewModel.Items.ToList())
+            foreach (var pivot in App.ViewModel.PivotsList)
             {
-                if (item.ToDelete == "Collapsed")
-                    fileWrite.WriteLine(item.Name);
+                var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+                StreamWriter fileWrite = null;
+                if (fileStorage.FileExists(pivot.Title))
+                    fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.Truncate, fileStorage));
+                else
+                    fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.OpenOrCreate, fileStorage));
+                foreach (var item in pivot.Items.ToList())
+                {
+                    if (item.ToDelete == "Collapsed")
+                        fileWrite.WriteLine(item.Name);
+                }
+                fileWrite.Close();
             }
-            fileWrite.Close();
         }
 
         // Код для выполнения в случае ошибки навигации
