@@ -23,7 +23,7 @@ namespace SList
         {
             InitializeComponent();
             DataContext = App.ViewModel;
-            App.ViewModel.LoadData();
+            // App.ViewModel.LoadData();
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
         }
 
@@ -43,7 +43,8 @@ namespace SList
             var currentPivot = (Pivots)MyPivot.SelectedItem;
             if (e.Key.Equals(Key.Enter))
             {
-                if (itemAddBox.Text != null)
+                // Проверка, не пустое ли название нового элемента списка
+                if (!string.IsNullOrWhiteSpace(itemAddBox.Text))
                 {
                     // Добавить элемент в начало коллекции
                     currentPivot.Items.Insert(0, (new ItemViewModel() { Name = itemAddBox.Text, ToDelete = "Collapsed" }));
@@ -84,16 +85,20 @@ namespace SList
                 if (child is TextBox)
                 {
                     TextBox oTextBox = (TextBox)child;
-
-                    if (oTextBox.Tag.Equals(currentPivot.Title))
+                    // Проверка, не пустое ли название нового списка
+                    if (!string.IsNullOrWhiteSpace(oTextBox.Text))
                     {
-                        App.ViewModel.NewPivot(oTextBox.Text);
-                        foreach (var pivot in App.ViewModel.PivotsList)
+                        if (oTextBox.Tag.Equals(currentPivot.Title))
                         {
-                            if (pivot.Title == oTextBox.Text)
-                                MyPivot.SelectedItem = pivot;
+                            App.ViewModel.NewPivot(oTextBox.Text);                            
+                            foreach (var pivot in App.ViewModel.PivotsList)
+                            {
+                                if (pivot.Title == oTextBox.Text)
+                                    MyPivot.SelectedItem = pivot;
+                            }
+                            oTextBox.Text = "";
+                            return;
                         }
-                        return;
                     }
                 }
                 else
