@@ -71,23 +71,13 @@ namespace SList
 
         private void AddIconButton_Click(object sender, EventArgs e)
         {
-            var button = (Button)sender;
-            var child = VisualTreeHelper.GetChild(button.Parent, 0);
-            TextBox oTextBox = (TextBox)child;
-            App.ViewModel.NewPivot(oTextBox.Text);
-            foreach (var pivot in App.ViewModel.PivotsList)
-            {
-                if (pivot.Title == oTextBox.Text)
-                    MyPivot.SelectedItem = pivot;
-            }
+            SearchInVisualTree(MyPivot);
         }
 
         private void SearchInVisualTree(DependencyObject targetElement)
         {
+            var currentPivot = (Pivots)MyPivot.SelectedItem;
             var oCount = VisualTreeHelper.GetChildrenCount(targetElement);
-            if (oCount == 0)
-                return;
-
             for (int i = 0; i < oCount; i++)
             {
                 var child = VisualTreeHelper.GetChild(targetElement, i);
@@ -95,10 +85,15 @@ namespace SList
                 {
                     TextBox oTextBox = (TextBox)child;
 
-                    if (oTextBox.Name.Equals("TextBox"))
+                    if (oTextBox.Tag.Equals(currentPivot.Title))
                     {
-                        MessageBox.Show("TextBox Found :)");
-                        break;
+                        App.ViewModel.NewPivot(oTextBox.Text);
+                        foreach (var pivot in App.ViewModel.PivotsList)
+                        {
+                            if (pivot.Title == oTextBox.Text)
+                                MyPivot.SelectedItem = pivot;
+                        }
+                        return;
                     }
                 }
                 else
