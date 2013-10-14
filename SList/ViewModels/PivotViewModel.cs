@@ -23,3 +23,4 @@ namespace SList
         public ObservableCollection<ItemViewModel> Items { get; set; }     
     }
 }
+// test commit
