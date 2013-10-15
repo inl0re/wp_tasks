@@ -7,15 +7,15 @@
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768" 
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
-    <Grid x:Name="LayoutRoot" Background="#FF498DFF">
+    <Grid x:Name="LayoutRoot" Background="Transparent">
 
         <StackPanel>
 
@@ -23,7 +23,7 @@
                 
                 <controls:Pivot.HeaderTemplate>
                     <DataTemplate>
-                            <TextBlock x:Name="Title" Text="{Binding Title}"/>
+                            <TextBlock Name="Title" Text="{Binding Title}"/>
                     </DataTemplate>
                 </controls:Pivot.HeaderTemplate>
 
@@ -38,7 +38,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                                <TextBox Grid.Row="0" Tag="{Binding Title}" Grid.ColumnSpan="2" Height="72" InputScope="Text" KeyDown="ItemAddBox_KeyDown"/>
+                                <TextBox Tag="{Binding Title}" Grid.ColumnSpan="2" InputScope="Text" KeyDown="ItemAddBox_KeyDown"/>
 
                             <ListBox Grid.Row="1" ItemsSource="{Binding Items}">
                                 <ListBox.ItemTemplate>
@@ -64,8 +64,8 @@
     
    <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsMenuEnabled="False">
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить список" Click="DeleteCurrentList_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить список" Click="DeleteCurrentList_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

@@ -63,17 +63,12 @@ namespace SList
                    }
                    fileRead.Close();
                }
-
-               /*
-               this.PivotsList.Add(new Pivots() { Title = "фрукты", Items = new ObservableCollection<ItemViewModel>() });
-               this.PivotsList[1].Items.Add(new ItemViewModel() { Name = "яблоки", ToDelete = "Collapsed" });
-               this.PivotsList[1].Items.Add(new ItemViewModel() { Name = "груши", ToDelete = "Collapsed" });
-                */
                this.IsDataLoaded = true;
            }
+
            else
            {
-               this.PivotsList.Add(new Pivots() { Title = "заглушка", Items = new ObservableCollection<ItemViewModel>() });
+               // this.PivotsList.Add(new Pivots() { Title = "заглушка", Items = new ObservableCollection<ItemViewModel>() });
                this.IsDataLoaded = true;
            }
         }

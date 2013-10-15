@@ -23,6 +23,7 @@ namespace SList
         {
             InitializeComponent();
             DataContext = App.ViewModel;
+            App.ViewModel.LoadData();
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
         }
 
@@ -35,20 +36,19 @@ namespace SList
             }
         }
 
-        // Добавление элементов в список по нажатию клавиши Enter
+        // Добавление в список по нажатию клавиши Enter
         private void ItemAddBox_KeyDown(object sender, KeyEventArgs e)
         {
+            var itemAddBox = (TextBox)sender;
+            var currentPivot = (Pivots)MyPivot.SelectedItem;
             if (e.Key.Equals(Key.Enter))
             {
-                var itemAddBox = (TextBox)sender;
-                // Проверка, не пустое ли название нового элемента списка
-                if (!string.IsNullOrWhiteSpace(itemAddBox.Text) && itemAddBox.Text.Length < 28)
+                if (itemAddBox.Text != null)
                 {
-                    var currentPivot = (Pivots)MyPivot.SelectedItem;
                     // Добавить элемент в начало коллекции
                     currentPivot.Items.Insert(0, (new ItemViewModel() { Name = itemAddBox.Text, ToDelete = "Collapsed" }));
-                    itemAddBox.Text = "";
                 }
+                itemAddBox.Text = "";                
             }
         }
 
@@ -57,60 +57,53 @@ namespace SList
         {
             var txtBlk = (TextBlock)sender;
             var itemViewModel = (ItemViewModel)txtBlk.DataContext;
+            // Зачёркиваем элемент
             if (itemViewModel.ToDelete == "Collapsed")
             {
                 itemViewModel.ToDelete = "Visible";
             }
-
+            // Убираем зачёркивание
             else if (itemViewModel.ToDelete == "Visible")
             {
                 itemViewModel.ToDelete = "Collapsed";
             }
-
         }
 
-        // Добавить новый список
         private void AddIconButton_Click(object sender, EventArgs e)
         {
-            SearchInVisualTree(MyPivot);
+            var currentPivot = (Pivots)MyPivot.SelectedItem;
+            string inputBoxText = SearchInVisualTree(MyPivot, currentPivot.Title);
+            App.ViewModel.NewPivot(inputBoxText);
+            foreach (var pivot in App.ViewModel.PivotsList)
+            {
+                if (pivot.Title == inputBoxText)
+                    MyPivot.SelectedItem = pivot;
+            }
         }
 
-        // Поиск по pivot'ам
-        private void SearchInVisualTree(DependencyObject targetElement)
+        private string SearchInVisualTree(DependencyObject targetElement, string tag)
         {
-            var currentPivot = (Pivots)MyPivot.SelectedItem;
             var oCount = VisualTreeHelper.GetChildrenCount(targetElement);
-            for (int i = 0; i < oCount; i++)
+            if (oCount != 0)
             {
-                var child = VisualTreeHelper.GetChild(targetElement, i);
-                if (child is TextBox)
+                for (int i = 0; i < oCount; i++)
                 {
-                    TextBox oTextBox = (TextBox)child;
-                    // Проверка, не пустое ли название нового списка
-                    if (!string.IsNullOrWhiteSpace(oTextBox.Text) && oTextBox.Text.Length < 28)
+                    var child = VisualTreeHelper.GetChild(targetElement, i);
+                    if (child is TextBox)
                     {
-                        if (oTextBox.Tag.Equals(currentPivot.Title))
+                        TextBox oTextBox = (TextBox)child;
+                        if (oTextBox.Tag.ToString().Equals(tag))
                         {
-                            // Создание нового списка
-                            App.ViewModel.NewPivot(oTextBox.Text);                            
-                            foreach (var pivot in App.ViewModel.PivotsList)
-                            {
-                                // Переключение на новый список
-                                if (pivot.Title == oTextBox.Text)
-                                    MyPivot.SelectedItem = pivot;
-                            }
-                            oTextBox.Text = "";
-                            // Фокус на MainPage, чтобы убрать клавиатуру
-                            this.Focus();
-                            return;
+                            return oTextBox.Text;
                         }
                     }
-                }
-                else
-                {
-                    SearchInVisualTree(child);
+                    else
+                    {
+                        SearchInVisualTree(child, tag);
+                    }
                 }
             }
+            return null;
         }
 
         private void DeleteCurrentList_Click(object sender, EventArgs e)
@@ -128,11 +121,7 @@ namespace SList
                 for (int i = 0; i < App.ViewModel.PivotsList.Count(); i++)
                 {
                     if (App.ViewModel.PivotsList[i].Title == currentPivot.Title)
-                    {
                         App.ViewModel.PivotsList.RemoveAt(i);
-                        if (App.ViewModel.PivotsList.Count() == 0)
-                            NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
-                    }
                 }
             }
         }
