@@ -17,6 +17,11 @@ namespace SList
         public StartPage()
         {
             InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
             var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
             if (fileStorage.GetFileNames().Length > 0)
                 NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));

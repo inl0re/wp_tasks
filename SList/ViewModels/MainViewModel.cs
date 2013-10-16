@@ -68,7 +68,6 @@ namespace SList
 
            else
            {
-               // this.PivotsList.Add(new Pivots() { Title = "заглушка", Items = new ObservableCollection<ItemViewModel>() });
                this.IsDataLoaded = true;
            }
         }

@@ -13,6 +13,7 @@ using Microsoft.Phone.Controls;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Collections.ObjectModel;
+using Microsoft.Phone.Shell;
 
 namespace SList
 {
@@ -24,6 +25,7 @@ namespace SList
             InitializeComponent();
             DataContext = App.ViewModel;
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+            
         }
 
         // Загрузка данных для элементов ViewModel
@@ -32,6 +34,28 @@ namespace SList
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
+            }
+            
+        }
+
+        // При нажатии на тайл списка делаем этот список активным в приложении
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            
+            if (NavigationContext.QueryString.ContainsKey("title"))
+            {
+                var tileTitle = NavigationContext.QueryString["title"];
+                App.ViewModel.LoadData();
+                foreach (var pivot in App.ViewModel.PivotsList)
+                {
+                    if (pivot.Title == tileTitle)
+                    {
+                        MyPivot.SelectedItem = pivot;
+                        return;
+                    }
+                }
+                
             }
         }
 
@@ -113,6 +137,7 @@ namespace SList
             }
         }
 
+        // Удаление текущего списка
         private void DeleteCurrentList_Click(object sender, EventArgs e)
         {
             MessageBoxResult m = MessageBox.Show("Вы точно хотите безвозвратно удалить список?", "Удалить список", MessageBoxButton.OKCancel);
@@ -134,6 +159,21 @@ namespace SList
                             NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
                     }
                 }
+            }
+        }
+
+        // Добавить Live Tile на раб. стол
+        private void AddTile_Click(object sender, EventArgs e)
+        {            
+            var currentPivot = (Pivots)MyPivot.SelectedItem;
+            ShellTile SecondaryTile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(currentPivot.Title));
+            if (SecondaryTile == null)
+            {
+                StandardTileData data = new StandardTileData
+                {
+                    Title = currentPivot.Title
+                };
+            ShellTile.Create(new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative), data);
             }
         }
 
