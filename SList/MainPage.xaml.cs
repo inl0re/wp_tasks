@@ -27,22 +27,32 @@ namespace SList
         {
             InitializeComponent();
             DataContext = App.ViewModel;
-            this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+            // this.Loaded += new RoutedEventHandler(MainPage_Loaded);
         }
 
         // Загрузка данных для элементов ViewModel
+        /*
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             if (!App.ViewModel.IsDataLoaded)
             {
                 App.ViewModel.LoadData();
-            }
-            
+            }           
+        }
+         */
+
+        private void DataLoad()
+        {
+            if (!App.ViewModel.IsDataLoaded)
+            {
+                App.ViewModel.LoadData();
+            } 
         }
 
         // При нажатии на тайл списка делаем этот список активным в приложении
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+            DataLoad();
             string tileTitle;
             if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
@@ -98,7 +108,7 @@ namespace SList
             SearchInVisualTree(MyPivot);
         }
 
-        // Поиск по pivot'ам
+        // Поиск по pivot'ам для добавления списка
         private void SearchInVisualTree(DependencyObject targetElement)
         {
             var currentPivot = (Pivots)MyPivot.SelectedItem;
@@ -154,6 +164,13 @@ namespace SList
                     if (App.ViewModel.PivotsList[i].Title == currentPivot.Title)
                     {
                         App.ViewModel.PivotsList.RemoveAt(i);
+                        // Удаляем соответсвующий тайл
+                        var navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+                        foreach (var tile in ShellTile.ActiveTiles)
+                        {
+                            if (tile.NavigationUri == navUri)
+                                tile.Delete();
+                        }
                         if (App.ViewModel.PivotsList.Count() == 0)
                             NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
                     }
@@ -161,7 +178,7 @@ namespace SList
             }
         }
 
-        // Добавить Live Tile на раб. стол
+        // Добавить Live Tile
         private void AddTile_Click(object sender, EventArgs e)
         {            
             var currentPivot = (Pivots)MyPivot.SelectedItem;
