@@ -9,11 +9,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Windows.Media.Imaging;
 using Microsoft.Phone.Controls;
 using System.IO.IsolatedStorage;
 using System.IO;
 using System.Collections.ObjectModel;
 using Microsoft.Phone.Shell;
+using ProTile.Lib;
+using ProTile;
 
 namespace SList
 {
@@ -25,7 +28,6 @@ namespace SList
             InitializeComponent();
             DataContext = App.ViewModel;
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
-            
         }
 
         // Загрузка данных для элементов ViewModel
@@ -41,12 +43,9 @@ namespace SList
         // При нажатии на тайл списка делаем этот список активным в приложении
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
-            
-            if (NavigationContext.QueryString.ContainsKey("title"))
+            string tileTitle;
+            if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
-                var tileTitle = NavigationContext.QueryString["title"];
-                App.ViewModel.LoadData();
                 foreach (var pivot in App.ViewModel.PivotsList)
                 {
                     if (pivot.Title == tileTitle)
@@ -54,9 +53,9 @@ namespace SList
                         MyPivot.SelectedItem = pivot;
                         return;
                     }
-                }
-                
+                }               
             }
+            base.OnNavigatedTo(e);
         }
 
         // Добавление элементов в список по нажатию клавиши Enter
@@ -166,16 +165,73 @@ namespace SList
         private void AddTile_Click(object sender, EventArgs e)
         {            
             var currentPivot = (Pivots)MyPivot.SelectedItem;
-            ShellTile SecondaryTile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(currentPivot.Title));
-            if (SecondaryTile == null)
+            // ShellTile SecondaryTile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(currentPivot.Title));
+            var navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+            if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
             {
-                StandardTileData data = new StandardTileData
-                {
-                    Title = currentPivot.Title
-                };
-            ShellTile.Create(new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative), data);
+                MessageBox.Show("Tile is already pinned");
+                return;
             }
+
+            string fileName = navUri.ToString().GetHashCode().ToString();
+            string list = "";
+            foreach (var item in currentPivot.Items)
+            {
+                list += item.Name + "\r\n";
+            }
+
+            // generate image for the front tile
+            Tile tile = new Tile
+            {
+                description = { Text = list },
+            };
+            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
+
+            // generate image for the back tile
+            /*
+            TileBack tileBack = new TileBack
+            {
+                text = { Text = "message" },
+                number = { Text = "number" },
+            };
+            SaveTile(tileBack, string.Format("/Shared/ShellContent/{0}back.png", fileName));
+             */
+
+            StandardTileData newTileData = new StandardTileData
+            {
+                Title = string.Empty,
+                // use proper address pointing to isolated storage!
+                BackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}.png", fileName)),
+                // BackBackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}back.png", fileName)),
+            };
+            // Create the tile and pin it to Start.
+            ShellTile.Create(navUri, newTileData);
+
+            /*
+            StandardTileData data = new StandardTileData
+            {
+                Title = currentPivot.Title
+            };
+            ShellTile.Create(navUri, data);   
+             */
         }
 
+        public void SaveTile(UserControl tile, string fileName)
+        {
+            // call Measure and Arrange because Tile is not part of logical tree
+            tile.Measure(new Size(173, 173));
+            tile.Arrange(new Rect(0, 0, 173, 173));
+
+            // render the Tile into WriteableBitmap
+            WriteableBitmap tileImage = new WriteableBitmap(173, 173);
+            tileImage.Render(tile, null);
+            tileImage.Invalidate();
+
+            // save is as Png file
+            using (IsolatedStorageFileStream stream = IsolatedStorageFile.GetUserStoreForApplication().CreateFile(fileName))
+            {
+                tileImage.SavePng(stream);
+            }
+        }
     }
 }
