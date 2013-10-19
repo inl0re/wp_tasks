@@ -27,20 +27,9 @@ namespace SList
         {
             InitializeComponent();
             DataContext = App.ViewModel;
-            // this.Loaded += new RoutedEventHandler(MainPage_Loaded);
         }
 
-        // Загрузка данных для элементов ViewModel
-        /*
-        private void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!App.ViewModel.IsDataLoaded)
-            {
-                App.ViewModel.LoadData();
-            }           
-        }
-         */
-
+        // Загрузка данных
         private void DataLoad()
         {
             if (!App.ViewModel.IsDataLoaded)
@@ -49,35 +38,35 @@ namespace SList
             } 
         }
 
-        // При нажатии на тайл списка делаем этот список активным в приложении
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             DataLoad();
             string tileTitle;
+            // Делаем список текущим при нажатии на тайл
             if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
-                foreach (var pivot in App.ViewModel.PivotsList)
-                {
-                    if (pivot.Title == tileTitle)
-                    {
-                        MyPivot.SelectedItem = pivot;
-                        return;
-                    }
-                }               
+                Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == tileTitle);
+                MyPivot.SelectedItem = pivot;            
             }
             base.OnNavigatedTo(e);
         }
 
-        // Добавление элементов в список по нажатию клавиши Enter
+        // Добавление элементов в список по нажатию Enter
         private void ItemAddBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key.Equals(Key.Enter))
             {
-                var itemAddBox = (TextBox)sender;
+                TextBox itemAddBox = (TextBox)sender;
                 // Проверка, не пустое ли название нового элемента списка
-                if (!string.IsNullOrWhiteSpace(itemAddBox.Text) && itemAddBox.Text.Length < 28)
+                if (string.IsNullOrWhiteSpace(itemAddBox.Text))
+                    return;
+                if (itemAddBox.Text.Length > 25)
                 {
-                    var currentPivot = (Pivots)MyPivot.SelectedItem;
+                    MessageBox.Show("Пункт списка не может быть длинее 25 символов");
+                    return;
+                }
+                {
+                    Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
                     // Добавить элемент в начало коллекции
                     currentPivot.Items.Insert(0, (new ItemViewModel() { Name = itemAddBox.Text, ToDelete = "Collapsed" }));
                     itemAddBox.Text = "";
@@ -88,16 +77,16 @@ namespace SList
         // Нажатие на элемент списка
         private void ItemsTextBlock_Tap(object sender, GestureEventArgs e)
         {
-            var txtBlk = (TextBlock)sender;
-            var itemViewModel = (ItemViewModel)txtBlk.DataContext;
-            if (itemViewModel.ToDelete == "Collapsed")
+            TextBlock txtBlk = (TextBlock)sender;
+            ItemViewModel item = (ItemViewModel)txtBlk.DataContext;
+            if (item.ToDelete == "Collapsed")
             {
-                itemViewModel.ToDelete = "Visible";
+                item.ToDelete = "Visible";
             }
 
-            else if (itemViewModel.ToDelete == "Visible")
+            else if (item.ToDelete == "Visible")
             {
-                itemViewModel.ToDelete = "Collapsed";
+                item.ToDelete = "Collapsed";
             }
 
         }
@@ -111,33 +100,33 @@ namespace SList
         // Поиск по pivot'ам для добавления списка
         private void SearchInVisualTree(DependencyObject targetElement)
         {
-            var currentPivot = (Pivots)MyPivot.SelectedItem;
-            var oCount = VisualTreeHelper.GetChildrenCount(targetElement);
-            for (int i = 0; i < oCount; i++)
+            Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(targetElement); i++)
             {
-                var child = VisualTreeHelper.GetChild(targetElement, i);
+                DependencyObject child = VisualTreeHelper.GetChild(targetElement, i);
                 if (child is TextBox)
                 {
                     TextBox oTextBox = (TextBox)child;
                     // Проверка, не пустое ли название нового списка
-                    if (!string.IsNullOrWhiteSpace(oTextBox.Text) && oTextBox.Text.Length < 28)
+                    if (string.IsNullOrWhiteSpace(oTextBox.Text))
+                        return;
+
+                    if (oTextBox.Text.Length > 16)
                     {
+                        MessageBox.Show("Название списка не может быть длинее 16 символов");
+                        return;
+                    }
                         if (oTextBox.Tag.Equals(currentPivot.Title))
                         {
                             // Создание нового списка
-                            App.ViewModel.NewPivot(oTextBox.Text);                            
-                            foreach (var pivot in App.ViewModel.PivotsList)
-                            {
-                                // Переключение на новый список
-                                if (pivot.Title == oTextBox.Text)
-                                    MyPivot.SelectedItem = pivot;
-                            }
+                            App.ViewModel.NewPivot(oTextBox.Text);
+                            Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == oTextBox.Text);
+                            MyPivot.SelectedItem = pivot;
                             oTextBox.Text = "";
                             // Фокус на MainPage, чтобы убрать клавиатуру
                             this.Focus();
                             return;
                         }
-                    }
                 }
                 else
                 {
@@ -156,43 +145,46 @@ namespace SList
             }
             else if (m == MessageBoxResult.OK)
             {
-                var currentPivot = (Pivots)MyPivot.SelectedItem;
-                var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                fileStorage.DeleteFile(currentPivot.Title);
-                for (int i = 0; i < App.ViewModel.PivotsList.Count(); i++)
+                Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
+                IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+                // Удаляем файл списка из хранилища
+                fileStorage.DeleteFile(currentPivot.Title);                
+                // Ищем и удаляем список из коллекции
+                Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title);
+                App.ViewModel.PivotsList.Remove(pivot);
+                // Удаляем картинку тайла из хранилища
+                try
                 {
-                    if (App.ViewModel.PivotsList[i].Title == currentPivot.Title)
-                    {
-                        App.ViewModel.PivotsList.RemoveAt(i);
-                        // Удаляем соответсвующий тайл
-                        var navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
-                        foreach (var tile in ShellTile.ActiveTiles)
-                        {
-                            if (tile.NavigationUri == navUri)
-                                tile.Delete();
-                        }
-                        if (App.ViewModel.PivotsList.Count() == 0)
-                            NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
-                    }
+                    fileStorage.DeleteFile(string.Format("/Shared/ShellContent/{0}.png", currentPivot.Title));
                 }
+                catch
+                {
+                    // do nothing
+                }
+                // Удаляем соответсвующий тайл
+                Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+                ShellTile tile = ShellTile.ActiveTiles.FirstOrDefault(t => t.NavigationUri == navUri);
+                if (tile != null)
+                    tile.Delete();
+                // Если списков больше нет, переходим на стартовую
+                if (App.ViewModel.PivotsList.Count() == 0)
+                    NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
             }
         }
 
         // Добавить Live Tile
         private void AddTile_Click(object sender, EventArgs e)
-        {            
-            var currentPivot = (Pivots)MyPivot.SelectedItem;
-            // ShellTile SecondaryTile = ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains(currentPivot.Title));
-            var navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+        {
+            Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
+            Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
             if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
             {
-                MessageBox.Show("Tile is already pinned");
+                MessageBox.Show("Тайл уже закреплён");
                 return;
             }
-
-            string fileName = navUri.ToString().GetHashCode().ToString();
+            string fileName = currentPivot.Title;
             string list = "";
-            foreach (var item in currentPivot.Items)
+            foreach (ItemViewModel item in currentPivot.Items)
             {
                 list += item.Name + "\r\n";
             }
@@ -202,37 +194,21 @@ namespace SList
             {
                 description = { Text = list },
             };
-            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
 
-            // generate image for the back tile
-            /*
-            TileBack tileBack = new TileBack
-            {
-                text = { Text = "message" },
-                number = { Text = "number" },
-            };
-            SaveTile(tileBack, string.Format("/Shared/ShellContent/{0}back.png", fileName));
-             */
+            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
 
             StandardTileData newTileData = new StandardTileData
             {
                 Title = string.Empty,
-                // use proper address pointing to isolated storage!
                 BackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}.png", fileName)),
-                // BackBackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}back.png", fileName)),
             };
+
             // Create the tile and pin it to Start.
             ShellTile.Create(navUri, newTileData);
-
-            /*
-            StandardTileData data = new StandardTileData
-            {
-                Title = currentPivot.Title
-            };
-            ShellTile.Create(navUri, data);   
-             */
+            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
         }
 
+        // Создание картинки тайла
         public void SaveTile(UserControl tile, string fileName)
         {
             // call Measure and Arrange because Tile is not part of logical tree
@@ -250,5 +226,6 @@ namespace SList
                 tileImage.SavePng(stream);
             }
         }
+
     }
 }

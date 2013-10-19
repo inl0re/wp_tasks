@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,13 +45,13 @@ namespace SList
         /// </summary>
         public void LoadData()
         {
-           var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+           IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
            string[] fileNames = fileStorage.GetFileNames();
            if (fileNames.Length > 0)
            {
                for (int f = 0; f < fileNames.Length; f++)
                {
-                   var fileRead = new StreamReader(new IsolatedStorageFileStream(fileNames[f], FileMode.OpenOrCreate, fileStorage));
+                   StreamReader fileRead = new StreamReader(new IsolatedStorageFileStream(fileNames[f], FileMode.OpenOrCreate, fileStorage));
                    string list = fileRead.ReadToEnd();
                    string[] lines = list.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                    this.PivotsList.Add(new Pivots() { Title = fileNames[f], Items = new ObservableCollection<ItemViewModel>() });
@@ -65,7 +66,6 @@ namespace SList
                }
                this.IsDataLoaded = true;
            }
-
            else
            {
                this.IsDataLoaded = true;
@@ -74,6 +74,11 @@ namespace SList
 
         public void NewPivot(string title)
         {
+            if (this.PivotsList.Any(p => p.Title == title))
+            {
+                MessageBox.Show(string.Format("Список \"{0}\" уже существует", title));
+                return;
+            }
             this.PivotsList.Add(new Pivots() { Title = title, Items = new ObservableCollection<ItemViewModel>() });
         }
 

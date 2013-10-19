@@ -99,7 +99,7 @@ namespace SList
         // Этот код не будет выполняться при закрытии приложения
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            DeleteItemsFromFile();
+            FilesUpdate();
         }
 
         // Код для выполнения при закрытии приложения (например, при нажатии пользователем кнопки "Назад")
@@ -107,24 +107,23 @@ namespace SList
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
             // Убедитесь, что здесь сохраняется необходимое состояние приложения.
-           DeleteItemsFromFile();
+            FilesUpdate();
         }
 
-        // Метод удаления зачёркнутых элементов списка из файла
-        protected void DeleteItemsFromFile()
+        // Обновление данных
+        protected void FilesUpdate()
         {
-            foreach (var pivot in App.ViewModel.PivotsList)
+            foreach (Pivots pivot in App.ViewModel.PivotsList)
             {
-                var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+                IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
                 StreamWriter fileWrite = null;
                 if (fileStorage.FileExists(pivot.Title))
                     fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.Truncate, fileStorage));
                 else
                     fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.OpenOrCreate, fileStorage));
-                foreach (var item in pivot.Items.ToList())
+                foreach (ItemViewModel item in pivot.Items.Where(i => i.ToDelete == "Collapsed"))
                 {
-                    if (item.ToDelete == "Collapsed")
-                        fileWrite.WriteLine(item.Name);
+                    fileWrite.WriteLine(item.Name);
                 }
                 fileWrite.Close();
             }

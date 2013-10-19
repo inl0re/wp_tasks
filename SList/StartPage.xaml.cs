@@ -17,23 +17,29 @@ namespace SList
         public StartPage()
         {
             InitializeComponent();
+            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
             if (fileStorage.GetFileNames().Length > 0)
                 NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
         }
 
         private void AddIconButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(InputBox.Text) && InputBox.Text.Length < 28)
+            if (string.IsNullOrWhiteSpace(InputBox.Text))
+                return;
+            if (InputBox.Text.Length > 16)
             {
-                App.ViewModel.NewPivot(InputBox.Text);
-                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+                MessageBox.Show("Название списка не может быть длинее 16 символов");
+                return;
             }
+            App.ViewModel.NewPivot(InputBox.Text);
+            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));         
         }
+
     }
 }
