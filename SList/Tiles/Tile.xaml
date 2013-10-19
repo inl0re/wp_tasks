@@ -6,7 +6,10 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     Width="173" Height="173">
-	<Grid x:Name="LayoutRoot" Width="173" Height="173">      
-        <TextBlock x:Name="description" Margin="8,0,8,0" TextWrapping="Wrap" Height="Auto"/>         
+	<Grid x:Name="LayoutRoot" Width="173" Height="173">
+        <StackPanel>
+            <TextBlock x:Name="title" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto"/>
+            <TextBlock x:Name="description" Margin="8,0,8,0" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" Height="Auto"/>
+        </StackPanel>
     </Grid>
 </UserControl>

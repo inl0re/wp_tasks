@@ -126,6 +126,11 @@ namespace SList
                     fileWrite.WriteLine(item.Name);
                 }
                 fileWrite.Close();
+                Uri navUri = new Uri("/MainPage.xaml?title=" + pivot.Title, UriKind.Relative);
+                if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
+                {
+                    App.ViewModel.TileAdd(pivot, true);
+                }
             }
         }
 

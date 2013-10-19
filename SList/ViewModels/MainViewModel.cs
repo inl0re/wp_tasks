@@ -15,6 +15,9 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
+using Microsoft.Phone.Shell;
+using ProTile.Lib;
+using ProTile;
 
 
 namespace SList
@@ -80,6 +83,60 @@ namespace SList
                 return;
             }
             this.PivotsList.Add(new Pivots() { Title = title, Items = new ObservableCollection<ItemViewModel>() });
+        }
+
+        public void TileAdd(Pivots pivot, bool update)
+        {
+            Uri navUri = new Uri("/MainPage.xaml?title=" + pivot.Title, UriKind.Relative);
+            string fileName = pivot.Title;
+            string list = "";
+            foreach (ItemViewModel item in pivot.Items.Where(i => i.ToDelete == "Collapsed"))
+            {
+                list += item.Name + "\r\n";
+            }
+
+            // generate image for the front tile
+            Tile tile = new Tile
+            {
+                title = { Text = pivot.Title },
+                description = { Text = list },
+            };
+
+            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
+
+            StandardTileData newTileData = new StandardTileData
+            {
+                Title = string.Empty,
+                BackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}.png", fileName)),
+            };
+
+            if (update)
+            {
+                ShellTile tileToUpdate = ShellTile.ActiveTiles.First(t => t.NavigationUri == navUri);
+                tileToUpdate.Update(newTileData);
+                return;
+            }
+            // Create the tile and pin it to Start.
+            ShellTile.Create(navUri, newTileData);     
+        }
+
+        // Создание картинки тайла
+        public void SaveTile(UserControl tile, string fileName)
+        {
+            // call Measure and Arrange because Tile is not part of logical tree
+            tile.Measure(new Size(173, 173));
+            tile.Arrange(new Rect(0, 0, 173, 173));
+
+            // render the Tile into WriteableBitmap
+            WriteableBitmap tileImage = new WriteableBitmap(173, 173);
+            tileImage.Render(tile, null);
+            tileImage.Invalidate();
+
+            // save is as Png file
+            using (IsolatedStorageFileStream stream = IsolatedStorageFile.GetUserStoreForApplication().CreateFile(fileName))
+            {
+                tileImage.SavePng(stream);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

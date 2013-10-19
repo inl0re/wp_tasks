@@ -15,8 +15,6 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using System.Collections.ObjectModel;
 using Microsoft.Phone.Shell;
-using ProTile.Lib;
-using ProTile;
 
 namespace SList
 {
@@ -182,50 +180,10 @@ namespace SList
                 MessageBox.Show("Тайл уже закреплён");
                 return;
             }
-            string fileName = currentPivot.Title;
-            string list = "";
-            foreach (ItemViewModel item in currentPivot.Items)
-            {
-                list += item.Name + "\r\n";
-            }
-
-            // generate image for the front tile
-            Tile tile = new Tile
-            {
-                description = { Text = list },
-            };
-
-            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
-
-            StandardTileData newTileData = new StandardTileData
-            {
-                Title = string.Empty,
-                BackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}.png", fileName)),
-            };
-
-            // Create the tile and pin it to Start.
-            ShellTile.Create(navUri, newTileData);
-            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+            App.ViewModel.TileAdd(currentPivot, false);
         }
 
-        // Создание картинки тайла
-        public void SaveTile(UserControl tile, string fileName)
-        {
-            // call Measure and Arrange because Tile is not part of logical tree
-            tile.Measure(new Size(173, 173));
-            tile.Arrange(new Rect(0, 0, 173, 173));
-
-            // render the Tile into WriteableBitmap
-            WriteableBitmap tileImage = new WriteableBitmap(173, 173);
-            tileImage.Render(tile, null);
-            tileImage.Invalidate();
-
-            // save is as Png file
-            using (IsolatedStorageFileStream stream = IsolatedStorageFile.GetUserStoreForApplication().CreateFile(fileName))
-            {
-                tileImage.SavePng(stream);
-            }
-        }
+        
 
     }
 }
