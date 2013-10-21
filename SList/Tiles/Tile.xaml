@@ -7,9 +7,15 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     Width="173" Height="173">
 	<Grid x:Name="LayoutRoot" Width="173" Height="173">
-        <StackPanel>
-            <TextBlock x:Name="title" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto"/>
-            <TextBlock x:Name="description" Margin="8,0,8,0" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" Height="Auto"/>
-        </StackPanel>
+        <Grid Background="#FF498DFF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="SandyBrown" />
+            <TextBlock x:Name="title" Foreground="White" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,0,8,0" HorizontalAlignment="Right" Height="Auto" Grid.Row="0"/>
+            <TextBlock x:Name="description" Foreground="White" Margin="16,0,16,0" TextWrapping="Wrap" Height="Auto" Grid.Row="1"/>
+        </Grid>
+
     </Grid>
 </UserControl>

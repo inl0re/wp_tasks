@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Yandex.Metrica</id>
+    <version>1.0.5041.48</version>
+    <title>Yandex.Metrica for Apps</title>
+    <authors>YANDEX</authors>
+    <owners>YANDEX</owners>
+    <licenseUrl>http://legal.yandex.ru/metrica_termsofuse/</licenseUrl>
+    <projectUrl>http://appmetrica.yandex.com/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Yandex.Metrica for Apps is a set of libraries for gathering statistics on mobile app usage. You can view the collected data in the Yandex.Metrica web interface.</description>
+    <copyright>© 2013 YANDEX</copyright>
+    <tags>yandex metrica metrika sdk яндекс метрика яндекс.метрика</tags>
+    <dependencies>
+      <group>
+        <dependency id="Zlib.Portable" version="1.9.2" />
+      </group>
+      <group targetFramework="WindowsPhone8.0">
+        <dependency id="Zlib.Portable" version="1.9.2" />
+      </group>
+      <group targetFramework="WindowsPhone7.1">
+        <dependency id="Zlib.Portable" version="1.9.2" />
+        <dependency id="Microsoft.Bcl" version="1.1.3" />
+        <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+        <dependency id="Microsoft.Bcl.Build" version="1.0.10" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
