@@ -37,6 +37,12 @@ namespace SList
             }
         }
 
+        private void getAppSettings()
+        {
+            IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
+            if (!appSettings.Contains("tileHeadShow"))
+                appSettings.Add("tileHeadShow", true);
+        }
         /// <summary>
         /// Обеспечивает быстрый доступ к корневому кадру приложения телефона.
         /// </summary>

@@ -41,5 +41,15 @@ namespace SList
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));         
         }
 
+        private void About_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative)); 
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative)); 
+        }
+
     }
 }

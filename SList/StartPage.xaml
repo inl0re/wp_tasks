@@ -14,26 +14,34 @@
     shell:SystemTray.IsVisible="True">
 
     <!--LayoutRoot представляет корневую сетку, где размещается все содержимое страницы-->
-    <Grid x:Name="LayoutRoot" Background="#FF498DFF">
+    <Grid x:Name="LayoutRoot" Background="#FF557DBB">
         <Grid.RowDefinitions>
+            <RowDefinition Height="177"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <!--TitlePanel содержит имя приложения и заголовок страницы-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="СПИСОК ПОКУПОК" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text=" " Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        <StackPanel Grid.Row="0" Margin="12,57,12,0">
+            <TextBlock TextAlignment="Center" Text="Введите имя нового списка и нажмите +" TextWrapping="Wrap" Foreground="White" Style="{StaticResource PhoneTextLargeStyle}"/>
         </StackPanel>
 
         <!--ContentPanel – поместите здесь дополнительное содержимое-->
         <Grid VerticalAlignment="Top" x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <TextBox x:Name="InputBox" InputScope="Text" Height="72" />
+            <TextBox x:Name="InputBox" InputScope="Text" Background="#FFD3DDED" BorderThickness="0" Foreground="Black" Height="72" />
         </Grid>
+        <StackPanel Grid.Row="2">
+        <TextBlock Text="в списке для добавления новых пунктов нажимайте ⏎" Margin="0,25,0,15" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+            <TextBlock Text="*" Margin="0,25,0,0" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+            <TextBlock Text="для удаления пункта просто его коснитесь" Margin="0,10,0,15" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+        </StackPanel>
     </Grid>
-    
+
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsMenuEnabled="False">
+        <shell:ApplicationBar IsMenuEnabled="True" ForegroundColor="White" BackgroundColor="#FF212021">
+        	<shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="настройки" Click="Settings_Click"/>
+        		<shell:ApplicationBarMenuItem Text="о программе" Click="About_Click"/>
+        	</shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

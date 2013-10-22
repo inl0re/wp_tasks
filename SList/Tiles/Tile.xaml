@@ -7,7 +7,7 @@
      Foreground="{StaticResource PhoneForegroundBrush}"
      Width="173" Height="173">
     <Grid x:Name="LayoutRoot" Width="173" Height="173">
-        <Grid Background="#FF498DFF">
+        <Grid Background="#FF557DBB">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />                
                 <RowDefinition Height="*" />                

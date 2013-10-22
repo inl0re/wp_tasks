@@ -15,58 +15,54 @@
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
-    <Grid x:Name="LayoutRoot" Background="#FF498DFF">
+    <Grid x:Name="LayoutRoot" Background="#FF557DBB">
 
-        <StackPanel>
+        <controls:Pivot x:Name="MyPivot" ItemsSource="{Binding PivotsList}">
+            <controls:Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock x:Name="Title" Foreground="White" Text="{Binding Title}"/>
+                </DataTemplate>
+            </controls:Pivot.HeaderTemplate>
 
-            <controls:Pivot x:Name="MyPivot" Title="СПИСОК ПОКУПОК" ItemsSource="{Binding PivotsList}">
-                
-                <controls:Pivot.HeaderTemplate>
-                    <DataTemplate>
-                            <TextBlock x:Name="Title" Text="{Binding Title}"/>
-                    </DataTemplate>
-                </controls:Pivot.HeaderTemplate>
-
-                <controls:Pivot.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                                <TextBox Grid.Row="0" Tag="{Binding Title}" Grid.ColumnSpan="2" Height="72" InputScope="Text" KeyDown="ItemAddBox_KeyDown"/>
-
-                            <ListBox Grid.Row="1" ItemsSource="{Binding Items}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Margin="4,0,0,4" Height="Auto">
-                                            <Grid>
-                                                <TextBlock Text="{Binding Name}" Tap="ItemsTextBlock_Tap" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                                <Line Stretch="Fill" Margin="0 12 0 0" Stroke="White" StrokeThickness="2" X1="1" Visibility="{Binding ToDelete}"/>
-                                            </Grid>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                            <TextBlock x:Name="DebugBlock" Grid.Column="1" Grid.Row="1" />
-                        </Grid>
-                    </DataTemplate>
-                </controls:Pivot.ItemTemplate>
-            </controls:Pivot>
-
-        </StackPanel>
-
+            <controls:Pivot.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Row="0" Tag="{Binding Title}" Grid.ColumnSpan="2" Height="72" InputScope="Text" Background="#FFD3DDED" Foreground="Black" KeyDown="ItemAddBox_KeyDown"/>                      
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Items}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="4,0,0,4" Height="Auto">
+                                        <Grid>
+                                            <TextBlock Text="{Binding Name}" Tap="ItemsTextBlock_Tap" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                            <Line Stretch="Fill" Margin="0 12 0 0" Stroke="White" StrokeThickness="2" X1="1" Visibility="{Binding ToDelete}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock x:Name="DebugBlock" Grid.Column="1" Grid.Row="1" />
+                    </Grid>
+                </DataTemplate>
+            </controls:Pivot.ItemTemplate>
+        </controls:Pivot>
     </Grid>
-    
-   <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsMenuEnabled="False">
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsMenuEnabled="True" BackgroundColor="#FF212021" ForegroundColor="White">
+            <shell:ApplicationBar.MenuItems>
+        		<shell:ApplicationBarMenuItem Text="о программе" Click="About_Click"/>
+        	</shell:ApplicationBar.MenuItems>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.favs.rest.png" Text="закрепить тайл" Click="AddTile_Click" d:IsHidden="True"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click" d:IsHidden="True"/>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить список" Click="DeleteCurrentList_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.favs.rest.png" Text="живой тайл" Click="AddTile_Click" d:IsHidden="True"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

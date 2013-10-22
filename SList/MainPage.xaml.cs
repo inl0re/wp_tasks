@@ -23,8 +23,7 @@ namespace SList
         // Конструктор
         public MainPage()
         {
-            InitializeComponent();
-            DataContext = App.ViewModel;
+            InitializeComponent();          
         }
 
         // Загрузка данных
@@ -38,6 +37,7 @@ namespace SList
 
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
+            DataContext = App.ViewModel;
             DataLoad();
             string tileTitle;
             // Делаем список текущим при нажатии на тайл
@@ -183,7 +183,10 @@ namespace SList
             App.ViewModel.TileAdd(currentPivot, false);
         }
 
-        
+        private void About_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative));
+        }
 
     }
 }
