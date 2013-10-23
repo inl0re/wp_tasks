@@ -11,7 +11,7 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True" d:DesignHeight="696" d:DesignWidth="480">
 
     <!--LayoutRoot представляет корневую сетку, где размещается все содержимое страницы-->
     <Grid x:Name="LayoutRoot" Background="#FF557DBB">
@@ -32,7 +32,7 @@
         <StackPanel Grid.Row="2">
         <TextBlock Text="в списке для добавления новых пунктов нажимайте ⏎" Margin="0,25,0,15" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
             <TextBlock Text="*" Margin="0,25,0,0" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
-            <TextBlock Text="для удаления пункта просто его коснитесь" Margin="0,10,0,15" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+            <TextBlock Text="для удаления пункта просто коснитесь его" Margin="0,10,0,15" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
         </StackPanel>
     </Grid>
 

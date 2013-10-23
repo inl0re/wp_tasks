@@ -58,6 +58,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsMenuEnabled="True" BackgroundColor="#FF212021" ForegroundColor="White">
             <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="настройки" Click="Settings_Click"/>
         		<shell:ApplicationBarMenuItem Text="о программе" Click="About_Click"/>
         	</shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.favs.rest.png" Text="закрепить тайл" Click="AddTile_Click" d:IsHidden="True"/>

@@ -37,12 +37,14 @@ namespace SList
             }
         }
 
+        /*
         private void getAppSettings()
         {
             IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
             if (!appSettings.Contains("tileHeadShow"))
                 appSettings.Add("tileHeadShow", true);
         }
+         */
         /// <summary>
         /// Обеспечивает быстрый доступ к корневому кадру приложения телефона.
         /// </summary>
@@ -123,10 +125,10 @@ namespace SList
             {
                 IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
                 StreamWriter fileWrite = null;
-                if (fileStorage.FileExists(pivot.Title))
-                    fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.Truncate, fileStorage));
+                if (fileStorage.FileExists("Data\\" + pivot.Title))
+                    fileWrite = new StreamWriter(new IsolatedStorageFileStream("Data\\" + pivot.Title, FileMode.Truncate, fileStorage));
                 else
-                    fileWrite = new StreamWriter(new IsolatedStorageFileStream(pivot.Title, FileMode.OpenOrCreate, fileStorage));
+                    fileWrite = new StreamWriter(new IsolatedStorageFileStream("Data\\" + pivot.Title, FileMode.OpenOrCreate, fileStorage));
                 foreach (ItemViewModel item in pivot.Items.Where(i => i.ToDelete == "Collapsed"))
                 {
                     fileWrite.WriteLine(item.Name);

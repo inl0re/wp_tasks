@@ -1,18 +1,23 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="SList.Settings"
+    x:Class="SList.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:SList"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="PortraitOrLandscape" Orientation="Portrait"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
-
+    shell:SystemTray.IsVisible="True" d:DesignHeight="768" d:DesignWidth="480">
+    
+    <phone:PhoneApplicationPage.Resources>
+        <local:AppSettings x:Key="appSettings"></local:AppSettings>
+    </phone:PhoneApplicationPage.Resources>
+    
     <!--LayoutRoot представляет корневую сетку, где размещается все содержимое страницы-->
     <Grid x:Name="LayoutRoot" Background="#FF557DBB">
         <Grid.RowDefinitions>
@@ -23,7 +28,7 @@
             <TextBlock Text="настрйоки" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Margin="12,0,12,0">
-            <CheckBox x:Name="tileHeadShow" Content="Показывать заголовок на тайле" Click="tileHeadShow_Click" />
+            <CheckBox Name="TileHeadSetting" Content="показывать заголовок тайла" IsChecked="{Binding Source={StaticResource appSettings}, Path=TileHeadSetting, Mode=TwoWay}" />
         </StackPanel>
     </Grid>
 

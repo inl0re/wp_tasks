@@ -49,12 +49,14 @@ namespace SList
         public void LoadData()
         {
            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-           string[] fileNames = fileStorage.GetFileNames();
+           if (!fileStorage.DirectoryExists("Data"))
+               fileStorage.CreateDirectory("Data");
+           string[] fileNames = fileStorage.GetFileNames("Data\\*");
            if (fileNames.Length > 0)
            {
                for (int f = 0; f < fileNames.Length; f++)
                {
-                   StreamReader fileRead = new StreamReader(new IsolatedStorageFileStream(fileNames[f], FileMode.OpenOrCreate, fileStorage));
+                   StreamReader fileRead = new StreamReader(new IsolatedStorageFileStream("Data\\" + fileNames[f], FileMode.OpenOrCreate, fileStorage));
                    string list = fileRead.ReadToEnd();
                    string[] lines = list.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                    this.PivotsList.Add(new Pivots() { Title = fileNames[f], Items = new ObservableCollection<ItemViewModel>() });

@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
 using System.IO;
+using System.Diagnostics;
 
 namespace SList
 {
@@ -17,15 +18,14 @@ namespace SList
         public StartPage()
         {
             InitializeComponent();
-            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
             IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-            if (fileStorage.GetFileNames().Length > 0)
+            if (fileStorage.DirectoryExists("Data") && fileStorage.GetFileNames("Data\\*").Length > 0)
                 NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+            base.OnNavigatedTo(e);    
         }
 
         private void AddIconButton_Click(object sender, EventArgs e)
@@ -43,12 +43,12 @@ namespace SList
 
         private void About_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative)); 
+            NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative)); 
         }
 
         private void Settings_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Settings.xaml", UriKind.Relative)); 
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative)); 
         }
 
     }

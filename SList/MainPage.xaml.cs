@@ -142,11 +142,11 @@ namespace SList
                 return;
             }
             else if (m == MessageBoxResult.OK)
-            {
+            {               
                 Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
                 IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
                 // Удаляем файл списка из хранилища
-                fileStorage.DeleteFile(currentPivot.Title);                
+                fileStorage.DeleteFile("Data\\" + currentPivot.Title);                
                 // Ищем и удаляем список из коллекции
                 Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title);
                 App.ViewModel.PivotsList.Remove(pivot);
@@ -164,9 +164,11 @@ namespace SList
                 ShellTile tile = ShellTile.ActiveTiles.FirstOrDefault(t => t.NavigationUri == navUri);
                 if (tile != null)
                     tile.Delete();
-                // Если списков больше нет, переходим на стартовую
+                // Если списков больше нет, переходим на стартовую 
                 if (App.ViewModel.PivotsList.Count() == 0)
-                    NavigationService.Navigate(new Uri("/StartPage.xaml", UriKind.Relative));
+                {
+                    NavigationService.Navigate(new Uri("/StartPage.xaml?from=MainPage", UriKind.Relative));
+                }
             }
         }
 
@@ -186,6 +188,11 @@ namespace SList
         private void About_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative));
+        }
+
+        private void Settings_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/SettingsPage.xaml", UriKind.Relative)); 
         }
 
     }
