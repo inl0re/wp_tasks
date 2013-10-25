@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{c4384f9e-246c-444c-ba66-445fc7864a97}" Title="Списки" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="dolom_z" Description="Списки. Делайте с ними, что хотите." Publisher="">
+  <App xmlns="" ProductID="{c4384f9e-246c-444c-ba66-445fc7864a97}" Title="Списки" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="dolom_z" Description="Удобные списки покупок/дел" Publisher="">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
     </Capabilities>
@@ -12,7 +12,8 @@
         <TemplateType5>
           <BackgroundImageURI IsRelative="true" IsResource="false">Background.png</BackgroundImageURI>
           <Count>0</Count>
-          <Title>Списки</Title>
+          <Title>
+          </Title>
         </TemplateType5>
       </PrimaryToken>
     </Tokens>

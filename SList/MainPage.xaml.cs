@@ -1,30 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using System;
+using System.IO.IsolatedStorage;
 using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Windows.Media.Imaging;
-using Microsoft.Phone.Controls;
-using System.IO.IsolatedStorage;
-using System.IO;
-using System.Collections.ObjectModel;
-using Microsoft.Phone.Shell;
 
 namespace SList
 {
     public partial class MainPage : PhoneApplicationPage
-    {
+    {    
         // Конструктор
         public MainPage()
         {
-            InitializeComponent();          
-        }
+            InitializeComponent();   
+        }        
 
         // Загрузка данных
         private void DataLoad()
@@ -40,7 +32,7 @@ namespace SList
             DataContext = App.ViewModel;
             DataLoad();
             string tileTitle;
-            // Делаем список текущим при нажатии на тайл
+            // Делаем список текущим, если пришли по нажатию на тайл
             if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
                 Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == tileTitle);
@@ -58,9 +50,9 @@ namespace SList
                 // Проверка, не пустое ли название нового элемента списка
                 if (string.IsNullOrWhiteSpace(itemAddBox.Text))
                     return;
-                if (itemAddBox.Text.Length > 25)
+                if (itemAddBox.Text.Length > 18)
                 {
-                    MessageBox.Show("Пункт списка не может быть длинее 25 символов");
+                    MessageBox.Show("Пункт списка не может быть длинее 18 символов");
                     return;
                 }
                 {
@@ -72,8 +64,7 @@ namespace SList
             }
         }
 
-        // Нажатие на элемент списка
-        private void ItemsTextBlock_Tap(object sender, GestureEventArgs e)
+        private void ItemsTextBlock_Tap(object sender, GestureEventArgs e) // Зачёркивание пунктов
         {
             TextBlock txtBlk = (TextBlock)sender;
             ItemViewModel item = (ItemViewModel)txtBlk.DataContext;
@@ -89,14 +80,12 @@ namespace SList
 
         }
 
-        // Добавить новый список
-        private void AddIconButton_Click(object sender, EventArgs e)
+        private void AddIconButton_Click(object sender, EventArgs e) // Добавить новый список
         {
             SearchInVisualTree(MyPivot);
         }
 
-        // Поиск по pivot'ам для добавления списка
-        private void SearchInVisualTree(DependencyObject targetElement)
+        private void SearchInVisualTree(DependencyObject targetElement) // Поиск по pivot'ам для добавления списка
         {
             Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(targetElement); i++)
@@ -108,7 +97,7 @@ namespace SList
                     // Проверка, не пустое ли название нового списка
                     if (string.IsNullOrWhiteSpace(oTextBox.Text))
                         return;
-
+                    
                     if (oTextBox.Text.Length > 16)
                     {
                         MessageBox.Show("Название списка не может быть длинее 16 символов");
@@ -117,7 +106,7 @@ namespace SList
                         if (oTextBox.Tag.Equals(currentPivot.Title))
                         {
                             // Создание нового списка
-                            App.ViewModel.NewPivot(oTextBox.Text);
+                            App.ViewModel.AddPivot(oTextBox.Text);
                             Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == oTextBox.Text);
                             MyPivot.SelectedItem = pivot;
                             oTextBox.Text = "";
@@ -133,8 +122,7 @@ namespace SList
             }
         }
 
-        // Удаление текущего списка
-        private void DeleteCurrentList_Click(object sender, EventArgs e)
+        private void DeleteCurrentList_Click(object sender, EventArgs e) // Удаление текущего списка
         {
             MessageBoxResult m = MessageBox.Show("Вы точно хотите безвозвратно удалить список?", "Удалить список", MessageBoxButton.OKCancel);
             if (m == MessageBoxResult.Cancel)
@@ -145,10 +133,8 @@ namespace SList
             {               
                 Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
                 IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                // Удаляем файл списка из хранилища
-                fileStorage.DeleteFile("Data\\" + currentPivot.Title);                
-                // Ищем и удаляем список из коллекции
-                Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title);
+                fileStorage.DeleteFile("Data\\" + currentPivot.Title); // Удаляем файл списка из хранилища                
+                Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title); // Ищем и удаляем список из коллекции
                 App.ViewModel.PivotsList.Remove(pivot);
                 // Удаляем картинку тайла из хранилища
                 try
@@ -172,8 +158,7 @@ namespace SList
             }
         }
 
-        // Добавить Live Tile
-        private void AddTile_Click(object sender, EventArgs e)
+        private void AddTile_Click(object sender, EventArgs e) // Добавить тайл
         {
             Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
             Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
@@ -182,12 +167,12 @@ namespace SList
                 MessageBox.Show("Тайл уже закреплён");
                 return;
             }
-            App.ViewModel.TileAdd(currentPivot, false);
+            App.tile.AddTile(currentPivot, false);
         }
 
         private void About_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/AboutPage.xaml", UriKind.Relative));
         }
 
         private void Settings_Click(object sender, EventArgs e)

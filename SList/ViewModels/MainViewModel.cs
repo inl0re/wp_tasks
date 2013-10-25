@@ -1,24 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.IO.IsolatedStorage;
-using Microsoft.Phone.Shell;
-using ProTile.Lib;
-using ProTile;
-
+using System.Linq;
+using System.Windows;
 
 namespace SList
 {
@@ -30,12 +16,7 @@ namespace SList
             this.PivotsList = new ObservableCollection<Pivots>();
         }
 
-        /// <summary>
-        /// Список Pivots.
-        /// </summary>
-        public ObservableCollection<Pivots> PivotsList { get; private set; }
-
-
+        public ObservableCollection<Pivots> PivotsList { get; private set; } // Коллекция списков
 
         public bool IsDataLoaded
         {
@@ -43,10 +24,7 @@ namespace SList
             private set;
         }
 
-        /// <summary>
-        /// Создает и добавляет несколько объектов Pivots в коллекцию элементов.
-        /// </summary>
-        public void LoadData()
+        public void LoadData() // Загрузка списков
         {
            IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
            if (!fileStorage.DirectoryExists("Data"))
@@ -77,7 +55,7 @@ namespace SList
            }
         }
 
-        public void NewPivot(string title)
+        public void AddPivot(string title) // Создаём новый список
         {
             if (this.PivotsList.Any(p => p.Title == title))
             {
@@ -85,60 +63,6 @@ namespace SList
                 return;
             }
             this.PivotsList.Add(new Pivots() { Title = title, Items = new ObservableCollection<ItemViewModel>() });
-        }
-
-        public void TileAdd(Pivots pivot, bool update)
-        {
-            Uri navUri = new Uri("/MainPage.xaml?title=" + pivot.Title, UriKind.Relative);
-            string fileName = pivot.Title;
-            string list = "";
-            foreach (ItemViewModel item in pivot.Items.Where(i => i.ToDelete == "Collapsed"))
-            {
-                list += item.Name + "\r\n";
-            }
-
-            // generate image for the front tile
-            Tile tile = new Tile
-            {
-                title = { Text = pivot.Title },
-                description = { Text = list },
-            };
-
-            SaveTile(tile, string.Format("/Shared/ShellContent/{0}.png", fileName));
-
-            StandardTileData newTileData = new StandardTileData
-            {
-                Title = string.Empty,
-                BackgroundImage = new Uri(string.Format("isostore:/Shared/ShellContent/{0}.png", fileName)),
-            };
-
-            if (update)
-            {
-                ShellTile tileToUpdate = ShellTile.ActiveTiles.First(t => t.NavigationUri == navUri);
-                tileToUpdate.Update(newTileData);
-                return;
-            }
-            // Create the tile and pin it to Start.
-            ShellTile.Create(navUri, newTileData);     
-        }
-
-        // Создание картинки тайла
-        public void SaveTile(UserControl tile, string fileName)
-        {
-            // call Measure and Arrange because Tile is not part of logical tree
-            tile.Measure(new Size(173, 173));
-            tile.Arrange(new Rect(0, 0, 173, 173));
-
-            // render the Tile into WriteableBitmap
-            WriteableBitmap tileImage = new WriteableBitmap(173, 173);
-            tileImage.Render(tile, null);
-            tileImage.Invalidate();
-
-            // save is as Png file
-            using (IsolatedStorageFileStream stream = IsolatedStorageFile.GetUserStoreForApplication().CreateFile(fileName))
-            {
-                tileImage.SavePng(stream);
-            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

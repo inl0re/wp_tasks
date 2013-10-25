@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using System.IO.IsolatedStorage;
+using System;
 using System.IO;
+using System.IO.IsolatedStorage;
+using System.Linq;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace SList
 {
     public partial class App : Application
     {
         private static MainViewModel viewModel = null;
-
+        public static ProTile.Tile tile = new ProTile.Tile();
         /// <summary>
         /// Статический элемент ViewModel, используемый в представлениях для привязки.
         /// </summary>
@@ -37,14 +29,6 @@ namespace SList
             }
         }
 
-        /*
-        private void getAppSettings()
-        {
-            IsolatedStorageSettings appSettings = IsolatedStorageSettings.ApplicationSettings;
-            if (!appSettings.Contains("tileHeadShow"))
-                appSettings.Add("tileHeadShow", true);
-        }
-         */
         /// <summary>
         /// Обеспечивает быстрый доступ к корневому кадру приложения телефона.
         /// </summary>
@@ -137,7 +121,7 @@ namespace SList
                 Uri navUri = new Uri("/MainPage.xaml?title=" + pivot.Title, UriKind.Relative);
                 if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
                 {
-                    App.ViewModel.TileAdd(pivot, true);
+                    App.tile.AddTile(pivot, true);
                 }
             }
         }
