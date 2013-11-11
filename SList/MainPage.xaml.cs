@@ -15,7 +15,7 @@ namespace SList
         // Конструктор
         public MainPage()
         {
-            InitializeComponent();   
+            InitializeComponent();
         }        
 
         // Загрузка данных
@@ -27,6 +27,7 @@ namespace SList
             } 
         }
 
+        /*
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             DataContext = App.ViewModel;
@@ -40,6 +41,7 @@ namespace SList
             }
             base.OnNavigatedTo(e);
         }
+         */
 
         // Добавление элементов в список по нажатию Enter
         private void ItemAddBox_KeyDown(object sender, KeyEventArgs e)
@@ -50,11 +52,13 @@ namespace SList
                 // Проверка, не пустое ли название нового элемента списка
                 if (string.IsNullOrWhiteSpace(itemAddBox.Text))
                     return;
+                /*
                 if (itemAddBox.Text.Length > 18)
                 {
                     MessageBox.Show("Пункт списка не может быть длинее 18 символов");
                     return;
                 }
+                 */
                 {
                     Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
                     // Добавить элемент в начало коллекции
@@ -85,6 +89,7 @@ namespace SList
             SearchInVisualTree(MyPivot);
         }
 
+        /*
         private void SearchInVisualTree(DependencyObject targetElement) // Поиск по pivot'ам для добавления списка
         {
             Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
@@ -121,6 +126,7 @@ namespace SList
                 }
             }
         }
+         */
 
         private void DeleteCurrentList_Click(object sender, EventArgs e) // Удаление текущего списка
         {
@@ -151,10 +157,12 @@ namespace SList
                 if (tile != null)
                     tile.Delete();
                 // Если списков больше нет, переходим на стартовую 
+                /*
                 if (App.ViewModel.PivotsList.Count() == 0)
                 {
                     NavigationService.Navigate(new Uri("/StartPage.xaml?from=MainPage", UriKind.Relative));
                 }
+                 */
             }
         }
 

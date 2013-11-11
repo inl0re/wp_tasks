@@ -123,19 +123,15 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\WMAppManifest.xml" />
+    <None Include="SList_2013_10_25_20_30_58.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\AppBar\appbar.add.rest.png" />
-    <Content Include="Assets\AppBar\appbar.basecircle.rest.png" />
-    <Content Include="Assets\AppBar\appbar.check.rest.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Assets\AppBar\appbar.delete.rest.png" />
-    <Content Include="Assets\AppBar\appbar.favs.rest.png" />
-    <Content Include="Assets\AppBar\appbar.refresh.rest.png" />
+    <Content Include="Assets\AppBar\appbar.pin.png" />
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

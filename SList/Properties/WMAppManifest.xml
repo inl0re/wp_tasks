@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2009/deployment" AppPlatformVersion="7.1">
-  <App xmlns="" ProductID="{c4384f9e-246c-444c-ba66-445fc7864a97}" Title="Списки" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="dolom_z" Description="Удобные списки покупок/дел" Publisher="">
+  <App xmlns="" ProductID="{c4384f9e-246c-444c-ba66-445fc7864a97}" Title="Списки" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="dolom_z" Description="Приложение для создания списков или заметок с возможностью закрепления тайлов с их содержимым.&#xD;&#xA;Удобное управление. Приложению не требуется никаких лишних разрешений." Publisher="dolom_z">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="StartPage.xaml" />
+      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="SListToken" TaskName="_default">
