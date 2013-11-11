@@ -73,12 +73,12 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AddPage.xaml.cs">
+      <DependentUpon>AddPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="StartPage.xaml.cs">
-      <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tiles\Tile.xaml.cs" />
     <Compile Include="Tiles\TileBack.xaml.cs" />
@@ -103,11 +103,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="AddPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StartPage.xaml">
+    <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -123,13 +123,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\WMAppManifest.xml" />
-    <None Include="SList_2013_10_25_20_30_58.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\AppBar\appbar.add.rest.png" />
+    <Content Include="Assets\AppBar\appbar.check.rest.png" />
     <Content Include="Assets\AppBar\appbar.delete.rest.png" />
     <Content Include="Assets\AppBar\appbar.pin.png" />
     <Content Include="Background.png">
