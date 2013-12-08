@@ -16,8 +16,17 @@ namespace SList
         // Конструктор
         public MainPage()
         {
-            InitializeComponent();   
-        }        
+            InitializeComponent();            
+        }
+
+        public void ArrowHideShow()
+        {
+            bool isPivotsEmpty = App.ViewModel.IsPivotsEmpty();
+            if (isPivotsEmpty == true)
+                ImgArrow.Visibility = Visibility.Visible;
+            else
+                ImgArrow.Visibility = Visibility.Collapsed;
+        }
 
         // Загрузка данных
         private void DataLoad()
@@ -27,12 +36,14 @@ namespace SList
                 App.ViewModel.LoadData();
             } 
         }
-
+       
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
         {
             DataContext = App.ViewModel;
             DataLoad();
             string tileTitle;
+            // Проверяем наличие списков
+            ArrowHideShow();
             // Делаем список текущим, если пришли по нажатию на тайл
             if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
@@ -41,7 +52,7 @@ namespace SList
             }
             base.OnNavigatedTo(e);
         }
-
+         
         // Добавление элементов в список по нажатию Enter
         private void ItemAddBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -51,11 +62,6 @@ namespace SList
                 // Проверка, не пустое ли название нового элемента списка
                 if (string.IsNullOrWhiteSpace(itemAddBox.Text))
                     return;
-                if (itemAddBox.Text.Length > 18)
-                {
-                    MessageBox.Show("Пункт списка не может быть длинее 18 символов");
-                    return;
-                }
                 {
                     Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
                     // Добавить элемент в начало коллекции
@@ -83,92 +89,59 @@ namespace SList
 
         private void AddIconButton_Click(object sender, EventArgs e) // Добавить новый список
         {
-            SearchInVisualTree(MyPivot);
-        }
-
-        private void SearchInVisualTree(DependencyObject targetElement) // Поиск по pivot'ам для добавления списка
-        {
-            Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(targetElement); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(targetElement, i);
-                if (child is TextBox)
-                {
-                    TextBox oTextBox = (TextBox)child;
-                    // Проверка, не пустое ли название нового списка
-                    if (string.IsNullOrWhiteSpace(oTextBox.Text))
-                        return;
-                    
-                    if (oTextBox.Text.Length > 16)
-                    {
-                        MessageBox.Show("Название списка не может быть длинее 16 символов");
-                        return;
-                    }
-                        if (oTextBox.Tag.Equals(currentPivot.Title))
-                        {
-                            // Создание нового списка
-                            App.ViewModel.AddPivot(oTextBox.Text);
-                            Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == oTextBox.Text);
-                            MyPivot.SelectedItem = pivot;
-                            oTextBox.Text = "";
-                            // Фокус на MainPage, чтобы убрать клавиатуру
-                            this.Focus();
-                            return;
-                        }
-                }
-                else
-                {
-                    SearchInVisualTree(child);
-                }
-            }
+            // переход на AddPage
+            NavigationService.Navigate(new Uri("/AddPage.xaml", UriKind.Relative));
         }
 
         private void DeleteCurrentList_Click(object sender, EventArgs e) // Удаление текущего списка
         {
-            MessageBoxResult m = MessageBox.Show("Вы точно хотите безвозвратно удалить список?", "Удалить список", MessageBoxButton.OKCancel);
-            if (m == MessageBoxResult.Cancel)
+            Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
+            if (currentPivot != null)
             {
-                return;
+                MessageBoxResult m = MessageBox.Show("Вы точно хотите безвозвратно удалить список?", "Удалить список", MessageBoxButton.OKCancel);
+                if (m == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+                else if (m == MessageBoxResult.OK)
+                {
+
+                    IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
+                    fileStorage.DeleteFile("Data\\" + currentPivot.Title); // Удаляем файл списка из хранилища                
+                    Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title); // Ищем и удаляем список из коллекции
+                    App.ViewModel.PivotsList.Remove(pivot);
+                    // Удаляем картинку тайла из хранилища
+                    try
+                    {
+                        fileStorage.DeleteFile(string.Format("/Shared/ShellContent/{0}.png", currentPivot.Title));
+                    }
+                    catch
+                    {
+                        // do nothing
+                    }
+                    // Удаляем соответсвующий тайл
+                    Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+                    ShellTile tile = ShellTile.ActiveTiles.FirstOrDefault(t => t.NavigationUri == navUri);
+                    if (tile != null)
+                        tile.Delete();
+                }
             }
-            else if (m == MessageBoxResult.OK)
-            {               
-                Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
-                IsolatedStorageFile fileStorage = IsolatedStorageFile.GetUserStoreForApplication();
-                fileStorage.DeleteFile("Data\\" + currentPivot.Title); // Удаляем файл списка из хранилища                
-                Pivots pivot = App.ViewModel.PivotsList.First(p => p.Title == currentPivot.Title); // Ищем и удаляем список из коллекции
-                App.ViewModel.PivotsList.Remove(pivot);
-                // Удаляем картинку тайла из хранилища
-                try
-                {
-                    fileStorage.DeleteFile(string.Format("/Shared/ShellContent/{0}.png", currentPivot.Title));
-                }
-                catch
-                {
-                    // do nothing
-                }
-                // Удаляем соответсвующий тайл
-                Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
-                ShellTile tile = ShellTile.ActiveTiles.FirstOrDefault(t => t.NavigationUri == navUri);
-                if (tile != null)
-                    tile.Delete();
-                // Если списков больше нет, переходим на стартовую 
-                if (App.ViewModel.PivotsList.Count() == 0)
-                {
-                    NavigationService.Navigate(new Uri("/StartPage.xaml?from=MainPage", UriKind.Relative));
-                }
-            }
+            ArrowHideShow();
         }
 
         private void AddTile_Click(object sender, EventArgs e) // Добавить тайл
         {
             Pivots currentPivot = (Pivots)MyPivot.SelectedItem;
-            Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
-            if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
+            if (currentPivot != null)
             {
-                MessageBox.Show("Тайл уже закреплён");
-                return;
+                Uri navUri = new Uri("/MainPage.xaml?title=" + currentPivot.Title, UriKind.Relative);
+                if (ShellTile.ActiveTiles.Any(t => t.NavigationUri == navUri))
+                {
+                    MessageBox.Show("Тайл уже закреплён");
+                    return;
+                }
+                App.tile.AddTile(currentPivot, false);
             }
-            App.tile.AddTile(currentPivot, false);
         }
 
         private void About_Click(object sender, EventArgs e)

@@ -13,8 +13,8 @@
     shell:SystemTray.IsVisible="True">
 
     <Grid x:Name="LayoutRoot" Background="#FF557DBB">
-
-        <controls:Pivot x:Name="MyPivot" ItemsSource="{Binding PivotsList}">
+        <Image x:Name="ImgArrow" Visibility="Collapsed" Margin="354,454,10,10" Source="arrow.png" Stretch="Fill"/>
+        <controls:Pivot x:Name="MyPivot" ItemsSource="{Binding PivotsList}" d:IsLocked="True" d:IsHidden="True">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock x:Name="Title" Foreground="White" Text="{Binding Title}"/>
@@ -32,19 +32,21 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Row="0" Tag="{Binding Title}" Grid.ColumnSpan="2" Height="72" InputScope="Text" Background="#FFD3DDED" Foreground="Black" KeyDown="ItemAddBox_KeyDown"/>                      
-                        <ListBox Grid.Row="1" ItemsSource="{Binding Items}">
+                        <TextBox Grid.Row="0" Tag="{Binding Title}" Grid.ColumnSpan="2" Height="72" InputScope="Text" Background="#FFD3DDED" Foreground="Black" KeyDown="ItemAddBox_KeyDown"/>
+                        <StackPanel Grid.Row="1" Margin="4,0,0,4" Height="Auto">
+                            <ListBox ItemsSource="{Binding Items}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="4,0,0,4" Height="Auto">
+                                    
                                         <Grid>
-                                            <TextBlock Text="{Binding Name}" Tap="ItemsTextBlock_Tap" Foreground="White" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                            <TextBlock Text="{Binding Name}" Tap="ItemsTextBlock_Tap" Foreground="White" TextWrapping="Wrap" Width="Auto" Height="Auto" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                                             <Line Stretch="Fill" Margin="0 12 0 0" Stroke="White" StrokeThickness="2" X1="1" Visibility="{Binding ToDelete}"/>
                                         </Grid>
-                                    </StackPanel>
+                                    
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </controls:Pivot.ItemTemplate>
@@ -54,12 +56,12 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="#FF212021" ForegroundColor="White">
             <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="добавить список" Click="AddIconButton_Click"/>
                 <shell:ApplicationBarMenuItem Text="настройки" Click="Settings_Click"/>
         		<shell:ApplicationBarMenuItem Text="о программе" Click="About_Click"/>
         	</shell:ApplicationBar.MenuItems>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.favs.rest.png" Text="закрепить тайл" Click="AddTile_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить список" Click="DeleteCurrentList_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton x:Name="PinIcon" IconUri="/Assets/AppBar/appbar.pin.png" Text="прикрепить" Click="AddTile_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton x:Name="DeleteIcon" IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить" Click="DeleteCurrentList_Click" d:IsHidden="True"/>        
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

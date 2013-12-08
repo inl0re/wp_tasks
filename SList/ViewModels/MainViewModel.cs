@@ -55,6 +55,14 @@ namespace SList
            }
         }
 
+        public bool IsPivotsEmpty()
+        {
+            if (this.PivotsList.Count() > 0)
+                return false;
+            else
+                return true;
+        }
+
         public void AddPivot(string title) // Создаём новый список
         {
             if (this.PivotsList.Any(p => p.Title == title))

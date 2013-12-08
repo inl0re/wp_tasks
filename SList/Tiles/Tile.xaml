@@ -3,18 +3,18 @@
  	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
  	FontFamily="{StaticResource PhoneFontFamilySemiBold}"
-     FontSize="{StaticResource PhoneFontSizeNormal}"
-     Foreground="{StaticResource PhoneForegroundBrush}"
-     Width="173" Height="173">
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    Width="173" Height="173">
     <Grid x:Name="LayoutRoot" Width="173" Height="173">
         <Grid Background="#FF557DBB">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />                
-                <RowDefinition Height="*" />                
-            </Grid.RowDefinitions>            
-            <Grid Grid.Row="0" Background="SandyBrown" />            
-            <TextBlock x:Name="title" Foreground="White" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,0,8,0" HorizontalAlignment="Right" Height="Auto" Grid.Row="0"/>
-            <TextBlock x:Name="description" Foreground="White" Margin="16,0,16,0" TextWrapping="Wrap" Height="Auto" Grid.Row="1"/>
-        </Grid>        
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="SandyBrown" />
+            <TextBlock x:Name="title" Foreground="White" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,0,8,0" HorizontalAlignment="Right" TextWrapping="NoWrap" LineStackingStrategy="BlockLineHeight" LineHeight="22.0" Height="Auto" Grid.Row="0"/>
+            <TextBlock x:Name="description" Grid.Row="1" Foreground="White" Margin="12,4,12,8" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" LineHeight="22.0" Height="Auto"/>
+        </Grid>
     </Grid>
 </UserControl>

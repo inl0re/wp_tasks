@@ -4,13 +4,13 @@
     xmlns:local="clr-namespace:SList">
 
     <local:MainViewModel.PivotsList>
-        <local:Pivots Title="овощи">
+        <local:Pivots Title="дела">
             <local:Pivots.Items>
-                <local:ItemViewModel Name="помидоры" ToDelete="Collapsed"/>
-                <local:ItemViewModel Name="огурцы" ToDelete="Collapsed"/>
+                <local:ItemViewModel Name="забрать загран" ToDelete="Collapsed"/>
+                <local:ItemViewModel Name="доделать приложение" ToDelete="Collapsed"/>
             </local:Pivots.Items>
         </local:Pivots>
-        <local:Pivots Title="фрукты">
+        <local:Pivots Title="покупки">
             <local:Pivots.Items>
                 <local:ItemViewModel Name="яблоки" ToDelete="Collapsed"/>
                 <local:ItemViewModel Name="груши" ToDelete="Collapsed"/>
