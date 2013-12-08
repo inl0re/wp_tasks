@@ -13,8 +13,8 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Background="SandyBrown" />
-            <TextBlock x:Name="title" Foreground="White" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,0,8,0" HorizontalAlignment="Right" TextWrapping="NoWrap" LineStackingStrategy="BlockLineHeight" LineHeight="22.0" Height="Auto" Grid.Row="0"/>
-            <TextBlock x:Name="description" Grid.Row="1" Foreground="White" Margin="12,4,12,8" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" LineHeight="22.0" Height="Auto"/>
+            <TextBlock x:Name="title" Foreground="White" FontSize="{StaticResource PhoneFontSizeSmall}" Margin="0,0,8,0" HorizontalAlignment="Right" TextWrapping="NoWrap" LineStackingStrategy="BlockLineHeight" LineHeight="22.0" Height="Auto" Grid.Row="0" FontFamily="Arial"/>
+            <TextBlock x:Name="description" Grid.Row="1" Foreground="White" Margin="8,4,8,8" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" LineHeight="18.0" Height="Auto" FontFamily="Arial" FontSize="16"/>
         </Grid>
     </Grid>
 </UserControl>
