@@ -26,7 +26,7 @@ namespace SList
         {
             if (string.IsNullOrWhiteSpace(NameNewList.Text))
             {
-                MessageBox.Show("Не введено имя списка");
+                MessageBox.Show("Не введено название списка");
             }
             else
             {

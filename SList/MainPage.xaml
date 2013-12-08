@@ -13,8 +13,8 @@
     shell:SystemTray.IsVisible="True">
 
     <Grid x:Name="LayoutRoot" Background="#FF557DBB">
-
-        <controls:Pivot x:Name="MyPivot" ItemsSource="{Binding PivotsList}">
+        <Image x:Name="ImgArrow" Visibility="Collapsed" Margin="354,454,10,10" Source="arrow.png" Stretch="Fill"/>
+        <controls:Pivot x:Name="MyPivot" ItemsSource="{Binding PivotsList}" d:IsLocked="True" d:IsHidden="True">
             <controls:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock x:Name="Title" Foreground="White" Text="{Binding Title}"/>
@@ -56,12 +56,12 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="#FF212021" ForegroundColor="White">
             <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="добавить список" Click="AddIconButton_Click"/>
                 <shell:ApplicationBarMenuItem Text="настройки" Click="Settings_Click"/>
         		<shell:ApplicationBarMenuItem Text="о программе" Click="About_Click"/>
         	</shell:ApplicationBar.MenuItems>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.pin.png" Text="закрепить тайл" Click="AddTile_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.add.rest.png" Text="добавить список" Click="AddIconButton_Click" d:IsHidden="True"/>
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить список" Click="DeleteCurrentList_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton x:Name="PinIcon" IconUri="/Assets/AppBar/appbar.pin.png" Text="прикрепить" Click="AddTile_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton x:Name="DeleteIcon" IconUri="/Assets/AppBar/appbar.delete.rest.png" Text="удалить" Click="DeleteCurrentList_Click" d:IsHidden="True"/>        
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

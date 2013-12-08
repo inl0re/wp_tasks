@@ -13,14 +13,14 @@
 
     <Grid x:Name="LayoutRoot" Background="#FF557DBB">
         <StackPanel>
-            <TextBlock HorizontalAlignment="Center" x:Name="Title" Foreground="White" Text="Имя нового списка" Style="{StaticResource PhoneTextTitle2Style}"/>
-            <TextBox x:Name="NameNewList" VerticalAlignment="Top" Height="72" InputScope="Text" Background="#FFD3DDED" Foreground="Black" />
+            <TextBlock Margin="0 20 0 0" HorizontalAlignment="Center" x:Name="Title" Foreground="White" Text="Название списка" Style="{StaticResource PhoneTextTitle2Style}"/>
+            <TextBox Margin="0 20 0 0" x:Name="NameNewList" VerticalAlignment="Top" Height="72" InputScope="Text" Background="#FFD3DDED" Foreground="Black" />
         </StackPanel>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar BackgroundColor="#FF212021" ForegroundColor="White">
-            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.check.rest.png" Text="добавить" Click="AddTile_Click" d:IsHidden="True"/>
+            <shell:ApplicationBarIconButton IconUri="/Assets/AppBar/appbar.check.rest.png" Text="готово" Click="AddTile_Click" d:IsHidden="True"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

@@ -15,8 +15,17 @@ namespace SList
         // Конструктор
         public MainPage()
         {
-            InitializeComponent();
-        }        
+            InitializeComponent();            
+        }
+
+        public void ArrowHideShow()
+        {
+            bool isPivotsEmpty = App.ViewModel.IsPivotsEmpty();
+            if (isPivotsEmpty == true)
+                ImgArrow.Visibility = Visibility.Visible;
+            else
+                ImgArrow.Visibility = Visibility.Collapsed;
+        }
 
         // Загрузка данных
         private void DataLoad()
@@ -32,6 +41,8 @@ namespace SList
             DataContext = App.ViewModel;
             DataLoad();
             string tileTitle;
+            // Проверяем наличие списков
+            ArrowHideShow();
             // Делаем список текущим, если пришли по нажатию на тайл
             if (NavigationContext.QueryString.TryGetValue("title", out tileTitle))
             {
@@ -114,6 +125,7 @@ namespace SList
                         tile.Delete();
                 }
             }
+            ArrowHideShow();
         }
 
         private void AddTile_Click(object sender, EventArgs e) // Добавить тайл
